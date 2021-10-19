@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import Rating from "./Rating";
+import "./App.scss";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        fetch(
+            "https://cors-anywhere.herokuapp.com/https://xkcd.com/info.0.json"
+        )
+            .then(function (response) {
+                console.log(response);
+                return response.json();
+            })
+            .then(function (myJson) {
+                console.log(myJson);
+                setData(myJson);
+            });
+    }, []);
+
+    return (
+        <div className="App">
+            <div className="App-header">
+              <h1>{data.title}</h1>
+              <time>{`${data.day}/${data.month}/${data.year}`}</time>
+              <img src={data.img} alt={data.alt}/>
+              <p>{data.alt}</p>
+              <Rating />
+            </div>
+        </div>
+    );
 }
 
 export default App;
